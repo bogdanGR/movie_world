@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Movie{% endblock %}
+
+{% block body %}
+    <h1>Edit Movie</h1>
+
+    {% include 'movie/_form.html.twig' with { form: form, button_label: 'Update' } %}
+
+    <a href="{{ path('movie_index') }}" class="btn btn-outline-secondary mt-3">Back to list</a>
+{% endblock %}

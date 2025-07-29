@@ -27,4 +27,40 @@
         </div>
     </header>
 
+    <main class="container my-4">
+        <div class="row">
+            <div class="col-8">
+                {% for movie in movies %}
+                    <div class="col-12 mb-3">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ movie.title }}</h5>
+                                <p class="card-text text-muted">{{ movie.description[:100] ~ '...' }}</p>
+
+                                <div class="mt-auto">
+                                    <a href="{{ path('movie_show', {'id': movie.id}) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                    <a href="{{ path('movie_edit', {'id': movie.id}) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <form method="post" action="{{ path('movie_delete', {'id': movie.id}) }}"
+                                          class="d-inline" onsubmit="return confirm('Are you sure?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ movie.id) }}">
+                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">No movies found.</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-4">
+                {% if app.user %}
+                    <a class="btn btn-outline-primary" href="{{ path('movie_new') }}">Create new Movie</a>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
 {% endblock %}

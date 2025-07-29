@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Movie Details{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Movie Details</h1>
+
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">{{ movie.title }}</h3>
+                <p class="card-text">
+                    <strong>Description:</strong><br>
+                    {{ movie.description|nl2br }}
+                </p>
+
+                <p class="card-text">
+                    <strong>Created At:</strong>
+                    {{ movie.createdAt ? movie.createdAt|date('Y-m-d H:i') : 'N/A' }}
+                </p>
+
+                <p class="card-text">
+                    <strong>Updated At:</strong>
+                    {{ movie.updatedAt ? movie.updatedAt|date('Y-m-d H:i') : 'N/A' }}
+                </p>
+
+                <p class="card-text">
+                    <strong>Created By:</strong>
+                    {{ movie.user.name ?? 'Unknown' }}
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ path('movie_index') }}" class="btn btn-outline-secondary">Back to list</a>
+            <a href="{{ path('movie_edit', { id: movie.id }) }}" class="btn btn-outline-primary">Edit</a>
+            <form method="post" action="{{ path('movie_delete', {'id': movie.id}) }}"
+                  class="d-inline" onsubmit="return confirm('Are you sure?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ movie.id) }}">
+                <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

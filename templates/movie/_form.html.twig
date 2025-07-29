@@ -1,0 +1,21 @@
+{{ form_start(form) }}
+
+<div class="mb-3">
+    {{ form_label(form.title, null, { 'label_attr': {'class': 'form-label'} }) }}
+    {{ form_widget(form.title, { 'attr': {'class': 'form-control'} }) }}
+    <div class="text-danger">
+        {{ form_errors(form.title) }}
+    </div>
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.description, null, { 'label_attr': {'class': 'form-label'} }) }}
+    {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'rows': 5} }) }}
+    <div class="text-danger">
+        {{ form_errors(form.description) }}
+    </div>
+</div>
+
+<button type="submit" class="btn btn-outline-primary">{{ button_label|default('Save') }}</button>
+
+{{ form_end(form) }}
