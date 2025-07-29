@@ -13,7 +13,7 @@
             <div class="col-6">
                 {% if app.user %}
                     <div class="mb-3">
-                        Welcome Back  {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        Welcome Back <span class="text-info"> {{ app.user.name }}</span> |  <a href="{{ path('app_logout') }}">Logout</a>
                     </div>
 
                 {% else %}
