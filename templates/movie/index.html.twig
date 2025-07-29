@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MovieController!{% endblock %}
+
+{% block body %}
+
+    <header>
+        <div class="row align-items-center">
+           <div class="col-6">
+               <h1>Movie World</h1>
+           </div>
+
+            <div class="col-6">
+                {% if app.user %}
+                    <div class="mb-3">
+                        Welcome Back  {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+
+                {% else %}
+                    <p>
+                        <a href="{{  path('app_login') }}">Log in</a> or
+                        <a class="btn btn-primary" href="{{  path('app_register') }}">Sign Up</a>
+
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+{% endblock %}
