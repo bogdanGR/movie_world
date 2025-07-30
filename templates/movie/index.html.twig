@@ -95,6 +95,9 @@
                         <div class="alert alert-info">No movies found.</div>
                     </div>
                 {% endfor %}
+                <div class="navigation">
+                    {{ knp_pagination_render(movies, 'pagination/custom.html.twig') }}
+                </div>
             </div>
             <div class="col-4">
                 {% if app.user %}

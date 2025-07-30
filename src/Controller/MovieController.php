@@ -6,19 +6,31 @@ use App\Entity\Movie;
 use App\Form\MovieType;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 
+
 final class MovieController extends AbstractController
 {
     #[Route('/', name: 'movie_index')]
-    public function index(MovieRepository $movieRepository): Response
+    public function index(Request $request, MovieRepository $movieRepository, PaginatorInterface $paginator): Response
     {
+        $query = $movieRepository->createQueryBuilder('m')
+            ->orderBy('m.created_at', 'DESC')
+            ->getQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1), // current page number
+            10 // items per page
+        );
+
         return $this->render('movie/index.html.twig', [
-            'movies' => $movieRepository->findAllOrderedByCreatedAtDesc(),
+            'movies' => $pagination,
         ]);
     }
 
