@@ -15,6 +15,7 @@ use App\Entity\User;
 #[HasLifecycleCallbacks]
 class Movie
 {
+    private bool $autoSetCreatedAt = true;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -115,7 +116,10 @@ class Movie
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        $this->setCreatedAt(new \DateTimeImmutable());
+        if ($this->shouldAutoSetCreatedAt() && $this->createdAt === null) {
+            $this->setCreatedAt(new \DateTimeImmutable());
+        }
+
         $this->setUpdatedAt(new \DateTimeImmutable());
     }
 
@@ -133,6 +137,10 @@ class Movie
         return $this->votes;
     }
 
+    public function getVotesByType($type): int
+    {
+        return $this->votes->filter(fn($vote) => $vote->getType() === $type)->count();
+    }
     public function addVote(Vote $vote): static
     {
         if (!$this->votes->contains($vote)) {
@@ -153,5 +161,24 @@ class Movie
         }
 
         return $this;
+    }
+
+    /**
+     * Return if should auto update created_at column
+     * @return bool
+     */
+    public function shouldAutoSetCreatedAt(): bool
+    {
+        return $this->autoSetCreatedAt;
+    }
+
+    /**
+     * Set to false auto set of created_at column
+     * To use it in fixtures in order to create movies with different dates
+     * @return void
+     */
+    public function disableAutoSetCreatedAt(): void
+    {
+        $this->autoSetCreatedAt = false;
     }
 }

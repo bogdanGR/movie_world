@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 final class MovieController extends AbstractController
 {
@@ -50,7 +51,7 @@ final class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'movie_show', methods: ['GET'])]
+    #[Route('/movies/{id}', name: 'movie_show', requirements: ['id' => Requirement::DIGITS], methods: ['GET'])]
     public function show(Movie $movie): Response
     {
         return $this->render('movie/show.html.twig', [
@@ -58,7 +59,7 @@ final class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'movie_edit', methods: ['GET', 'POST'])]
+    #[Route('/movies/{id}/edit', name: 'movie_edit', requirements: ['id' => Requirement::DIGITS], methods: ['GET', 'POST'])]
     public function edit(Request $request, Movie $movie, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(MovieType::class, $movie);
@@ -76,7 +77,7 @@ final class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'movie_delete', methods: ['POST'])]
+    #[Route('/movies/{id}', name: 'movie_delete', requirements: ['id' => Requirement::DIGITS], methods: ['POST'])]
     public function delete(Request $request, Movie $movie, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$movie->getId(), $request->request->get('_token'))) {
