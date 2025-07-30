@@ -78,7 +78,12 @@
                                     </div>
                                     <div class="col-6">
                                         <p class="text-end">
-                                            Posted By  {{ movie.user.name }}
+                                            Posted by
+                                            {% if app.user and app.user.id == movie.user.id %}
+                                                You
+                                            {% else %}
+                                                {{ movie.user.name }}
+                                            {% endif %}
                                         </p>
                                     </div>
                                 </div>
