@@ -112,6 +112,7 @@
             <div class="col-4">
                 {% if app.user %}
                     <a class="btn btn-outline-primary" href="{{ path('movie_new') }}">Create new Movie</a>
+                    <a href="{{ path('movie_index', {'user': app.user.id}) }}" class="btn btn-primary">My Movies</a>
                 {% endif %}
 
                 <div class="card mt-3">
