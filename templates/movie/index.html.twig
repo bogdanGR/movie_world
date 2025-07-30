@@ -9,7 +9,6 @@
            <div class="col-6">
                <h1>Movie World</h1>
            </div>
-
             <div class="col-6">
                 {% if app.user %}
                     <div class="mb-3">
@@ -30,9 +29,7 @@
     <main class="container my-4">
         <div class="row">
             <div class="mb-2">
-                    <span class="text-muted">
-                       Found {{ totalMovies }} movies
-                    </span>
+                <span class="text-muted">Found {{ totalMovies }} movies</span>
             </div>
             <div class="col-8">
                 {% for movie in movies %}
@@ -195,33 +192,52 @@
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.vote-link').forEach(link => {
-                link.addEventListener('click', async (e) => {
-                    e.preventDefault();
+            // Use event delegation for vote links inside the container
+            document.body.addEventListener('click', async (e) => {
+                if (!e.target.classList.contains('vote-link')) return;
 
-                    const movieId = e.target.dataset.movie;
-                    const type = e.target.dataset.type;
+                e.preventDefault();
 
-                    const response = await fetch(`/vote/${movieId}/${type}`, {
-                        method: 'POST',
-                    });
+                const link = e.target;
+                const movieId = link.dataset.movie;
+                const type = link.dataset.type;
 
+                try {
+                    const response = await fetch(`/vote/${movieId}/${type}`, {method: 'POST'});
                     const data = await response.json();
 
-                    if (response.ok) {
-                        // Update vote counts
-                        e.target.closest('p').innerHTML = `
-                            <a href="#" class="vote-link" data-movie="${movieId}" data-type="like">${data.likes} likes</a> |
-                            <a href="#" class="vote-link" data-movie="${movieId}" data-type="hate">${data.hates} hates</a>
-                        `;
-                        // Re-bind click events
-                        document.dispatchEvent(new Event('DOMContentLoaded'));
-                    } else {
+                    if (!response.ok) {
                         alert(data.error || 'Error while voting');
+                        return;
                     }
-                });
+
+                    // Find the parent container (the <p> containing vote links)
+                    const voteContainer = link.closest('p');
+
+                    const likeLink = voteContainer.querySelector('a[data-type="like"]');
+                    likeLink.textContent = `${data.likes} likes`;
+
+                    const hateLink = voteContainer.querySelector('a[data-type="hate"]');
+                    hateLink.textContent = `${data.hates} hates`;
+
+                    // Remove highlight classes from both
+                    likeLink.classList.remove('text-success', 'fw-bold');
+                    hateLink.classList.remove('text-danger', 'fw-bold');
+
+                    // Highlight the user vote if any
+                    if (data.userVote && data.userVote === 'like') {
+                        likeLink.classList.add('text-success', 'fw-bold');
+                    } else if (data.userVote && data.userVote === 'hate') {
+                        hateLink.classList.add('text-danger', 'fw-bold');
+                    }
+
+                } catch (error) {
+                    alert('Unexpected error while voting');
+                    console.error(error);
+                }
             });
         });
+
     </script>
 
 {% endblock %}
