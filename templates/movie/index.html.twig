@@ -60,8 +60,7 @@
 
                                 <div class="row card-footer align-items-center">
                                     <div class="col-6">
-                                        <p class="align-item-center mb-0">
-
+                                        <div class="align-item-center mb-0">
                                             {% set vote = app.user ? app.user.getUserVoteByMovieId(movie.id) : null %}
 
                                             {% if app.user and app.user.id != movie.user.id %}
@@ -72,14 +71,14 @@
                                                     {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_HATE')) }} hates
                                                 </a>
                                             {% else %}
-                                                <p>  {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_LIKE')) }} likes
+                                                <p class="mb-0">  {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_LIKE')) }} likes
                                             |       {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_HATE')) }} hates
                                                 </p>
                                             {% endif %}
-                                        </p>
+                                        </div>
                                     </div>
                                     <div class="col-6">
-                                        <p class="text-end">
+                                        <p class="text-end mb-0">
                                             Posted by
                                             {% if app.user and app.user.id == movie.user.id %}
                                                 <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'user': movie.user.id})) }}">
