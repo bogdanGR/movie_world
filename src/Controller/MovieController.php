@@ -18,7 +18,7 @@ final class MovieController extends AbstractController
     public function index(MovieRepository $movieRepository): Response
     {
         return $this->render('movie/index.html.twig', [
-            'movies' => $movieRepository->findAll(),
+            'movies' => $movieRepository->findAllOrderedByCreatedAtDesc(),
         ]);
     }
 

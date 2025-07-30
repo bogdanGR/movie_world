@@ -16,6 +16,18 @@ class MovieRepository extends ServiceEntityRepository
         parent::__construct($registry, Movie::class);
     }
 
+    /**
+     * Return ordered movies by created_at
+     * @return array
+     */
+    public function findAllOrderedByCreatedAtDesc(): array
+    {
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.created_at', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Movie[] Returns an array of Movie objects
 //     */
