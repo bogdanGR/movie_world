@@ -131,4 +131,16 @@ class Vote
     {
         return $this->type === self::TYPE_HATE;
     }
+
+    /**
+     * Return array of vote types
+     * @return int[]
+     */
+    public static function getTypes()
+    {
+        return [
+            'like' => Vote::TYPE_LIKE,
+            'hate' => Vote::TYPE_HATE,
+        ];
+    }
 }

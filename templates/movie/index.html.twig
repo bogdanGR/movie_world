@@ -56,8 +56,21 @@
                                 <div class="row card-footer align-items-center">
                                     <div class="col-6">
                                         <p class="align-item-center mb-0">
-                                            {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_LIKE')) }} likes |
-                                            {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_HATE')) }} hates
+
+                                            {% set vote = app.user.getUserVoteByMovieId(movie.id) %}
+
+                                            {% if app.user and app.user.id != movie.user.id %}
+                                                <a href="#" class="vote-link {{ vote and vote.type == constant('App\\Entity\\Vote::TYPE_LIKE') ? 'text-success fw-bold' : '' }}"data-movie="{{ movie.id }}" data-type="like">
+                                                    {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_LIKE')) }} likes
+                                                </a> |
+                                                <a href="#" class="vote-link {{ vote and vote.type == constant('App\\Entity\\Vote::TYPE_HATE') ? 'text-danger fw-bold' : '' }}" data-movie="{{ movie.id }}" data-type="hate">
+                                                    {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_HATE')) }} hates
+                                                </a>
+                                            {% else %}
+                                                <p>  {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_LIKE')) }} likes
+                                            |       {{ movie.getVotesByType(constant('App\\Entity\\Vote::TYPE_HATE')) }} hates
+                                                </p>
+                                            {% endif %}
                                         </p>
                                     </div>
                                     <div class="col-6">
@@ -82,5 +95,35 @@
             </div>
         </div>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.vote-link').forEach(link => {
+                link.addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    const movieId = e.target.dataset.movie;
+                    const type = e.target.dataset.type;
+
+                    const response = await fetch(`/vote/${movieId}/${type}`, {
+                        method: 'POST',
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Update vote counts
+                        e.target.closest('p').innerHTML = `
+                            <a href="#" class="vote-link" data-movie="${movieId}" data-type="like">${data.likes} likes</a> |
+                            <a href="#" class="vote-link" data-movie="${movieId}" data-type="hate">${data.hates} hates</a>
+                        `;
+                        // Re-bind click events
+                        document.dispatchEvent(new Event('DOMContentLoaded'));
+                    } else {
+                        alert(data.error || 'Error while voting');
+                    }
+                });
+            });
+        });
+    </script>
 
 {% endblock %}

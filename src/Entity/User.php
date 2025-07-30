@@ -269,4 +269,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * Returns Vote entity by movie id
+     * @param int $movieId
+     * @return Vote|null
+     */
+    public function getUserVoteByMovieId(int $movieId): ?Vote
+    {
+        foreach ($this->getVotes() as $vote) {
+            if ($vote->getMovie()->getId() === $movieId) {
+                return $vote;
+            }
+        }
+
+        return null;
+    }
 }
