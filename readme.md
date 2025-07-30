@@ -29,7 +29,7 @@ Implemented as a Case study for PHP Software Engineer at Travelstaytion.
 
 ```bash
 git clone git@github.com:bogdanGR/movie_world.git
-cd movie-voting-app
+cd movie_world
 ```
 ### 2. Install Dependencies and setup env
 
