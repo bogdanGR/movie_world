@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
+use App\Entity\Vote;
 use App\Form\MovieType;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Doctrine\ORM\Query\Expr\Join;
 
 
 final class MovieController extends AbstractController
@@ -19,18 +21,24 @@ final class MovieController extends AbstractController
     #[Route('/', name: 'movie_index')]
     public function index(Request $request, MovieRepository $movieRepository, PaginatorInterface $paginator): Response
     {
-        $query = $movieRepository->createQueryBuilder('m')
-            ->orderBy('m.created_at', 'DESC')
-            ->getQuery();
+        $sortBy = $request->query->get('sort', 'created_at');
+        $sortOrder = $request->query->get('order', 'desc');
+
+        $queryBuilder = $movieRepository->getSortedQueryBuilder($sortBy, $sortOrder);
 
         $pagination = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1), // current page number
-            10 // items per page
+            $queryBuilder,
+            $request->query->getInt('page', 1),
+            10
         );
+
+        $totalMovies = $movieRepository->count([]);
 
         return $this->render('movie/index.html.twig', [
             'movies' => $pagination,
+            'totalMovies' => $totalMovies,
+            'currentSort' => $sortBy,
+            'currentOrder' => $sortOrder,
         ]);
     }
 

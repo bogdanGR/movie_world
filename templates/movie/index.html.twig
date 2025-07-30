@@ -30,6 +30,12 @@
     <main class="container my-4">
         <div class="row">
             <div class="col-8">
+                <div>
+{#                        <span class="text-muted">#}
+{#                            Showing {{ movies.getCurrentPageOffsetStart }} to {{ movies.getCurrentPageOffsetEnd }}#}
+{#                            of <strong>{{ movies.getTotalItemCount }}</strong> movies#}
+{#                        </span>#}
+                </div>
                 {% for movie in movies %}
                     <div class="col-12 mb-3">
                         <div class="card h-100 shadow-sm">
@@ -103,6 +109,83 @@
                 {% if app.user %}
                     <a class="btn btn-outline-primary" href="{{ path('movie_new') }}">Create new Movie</a>
                 {% endif %}
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-sort"></i> Sort Movies
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="sortForm" method="GET">
+                            <input type="hidden" name="page" value="{{ app.request.query.get('page', 1) }}">
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Sort by:</label>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="sort" value="created_at"
+                                           id="sort_date" {{ currentSort == 'created_at' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="sort_date">
+                                        <i class="fas fa-calendar"></i> By Posted Date
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="sort" value="updated_at"
+                                           id="sort_updated" {{ currentSort == 'updated_at' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="sort_updated">
+                                        <i class="fas fa-clock"></i> By Last Updated Date
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="sort" value="likes"
+                                           id="sort_likes" {{ currentSort == 'likes' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="sort_likes">
+                                        <i class="fas fa-thumbs-up text-success"></i> By Likes
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="sort" value="hates"
+                                           id="sort_hates" {{ currentSort == 'hates' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="sort_hates">
+                                        <i class="fas fa-thumbs-down text-danger"></i> By Hates
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Order:</label>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="order" value="desc"
+                                           id="order_desc" {{ currentOrder == 'desc' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="order_desc">
+                                        <i class="fas fa-arrow-down"></i> Descending (High to Low)
+                                    </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="order" value="asc"
+                                           id="order_asc" {{ currentOrder == 'asc' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="order_asc">
+                                        <i class="fas fa-arrow-up"></i> Ascending (Low to High)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter"></i> Apply Sort
+                                </button>
+                                <a href="{{ path('movie_index') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-undo"></i> Reset
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

@@ -3,8 +3,14 @@
 namespace App\Repository;
 
 use App\Entity\Movie;
+use App\Entity\Vote;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
+
 
 /**
  * @extends ServiceEntityRepository<Movie>
@@ -17,15 +23,41 @@ class MovieRepository extends ServiceEntityRepository
     }
 
     /**
-     * Return ordered movies by created_at
-     * @return array
+     * Return ordered movies
+     * @param string $sortBy
+     * @param string $sortOrder
+     * @return QueryBuilder
      */
-    public function findAllOrderedByCreatedAtDesc(): array
+    public function getSortedQueryBuilder(string $sortBy = 'created_at', string $sortOrder = 'desc'): QueryBuilder
     {
-        return $this->createQueryBuilder('m')
-            ->orderBy('m.created_at', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $qb = $this->createQueryBuilder('m');
+
+        switch ($sortBy) {
+            case 'likes':
+                $qb->leftJoin('m.votes', 'v', Join::WITH, 'v.type = :type')
+                    ->setParameter('type', Vote::TYPE_LIKE)
+                    ->groupBy('m.id')
+                    ->orderBy('COUNT(v.id)', $sortOrder);
+                break;
+
+            case 'hates':
+                $qb->leftJoin('m.votes', 'v', Join::WITH, 'v.type = :type')
+                    ->setParameter('type', Vote::TYPE_HATE)
+                    ->groupBy('m.id')
+                    ->orderBy('COUNT(v.id)', $sortOrder);
+                break;
+
+            case 'updated_at':
+                $qb->orderBy('m.updated_at', $sortOrder);
+                break;
+
+            case 'created_at':
+            default:
+                $qb->orderBy('m.created_at', $sortOrder);
+                break;
+        }
+
+        return $qb;
     }
 
 //    /**

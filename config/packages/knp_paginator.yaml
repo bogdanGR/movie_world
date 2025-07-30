@@ -1,3 +1,5 @@
 knp_paginator:
     template:
         pagination: '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig'
+    default_options:
+        sort_field_name: ~
