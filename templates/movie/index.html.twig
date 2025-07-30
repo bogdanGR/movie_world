@@ -42,7 +42,7 @@
                                             {{ movie.title }}
                                         </a>
                                     </h4>
-                                    <span class="col-4 text-end">Posted on  {{ movie.createdAt ? movie.createdAt|date('d/m/Y') : 'N/A' }}</span>
+                                    <span class="col-4 text-end">Posted  {{ movie.createdAt ? movie.createdAt|date('d/m/Y') : 'N/A' }}</span>
                                 </div>
                                 <div class="pb-3 pt-3 text-end">
                                     <a href="{{ path('movie_show', {'id': movie.id}) }}" class="btn btn-sm btn-outline-primary">View</a>

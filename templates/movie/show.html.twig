@@ -15,13 +15,13 @@
                 </p>
 
                 <p class="card-text">
-                    <strong>Created At:</strong>
-                    {{ movie.createdAt ? movie.createdAt|date('Y-m-d H:i') : 'N/A' }}
+                    <strong>Posted:</strong>
+                    {{ movie.createdAt ? movie.createdAt|date('d/m/Y') : 'N/A' }}
                 </p>
 
                 <p class="card-text">
-                    <strong>Updated At:</strong>
-                    {{ movie.updatedAt ? movie.updatedAt|date('Y-m-d H:i') : 'N/A' }}
+                    <strong>Last updated:</strong>
+                    {{ movie.updatedAt ? movie.updatedAt|date('d/m/Y') : 'N/A' }}
                 </p>
 
                 <p class="card-text">
