@@ -116,7 +116,7 @@ class Movie
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        if ($this->shouldAutoSetCreatedAt() && $this->createdAt === null) {
+        if ($this->shouldAutoSetCreatedAt() && $this->getCreatedAt() === null) {
             $this->setCreatedAt(new \DateTimeImmutable());
         }
 
