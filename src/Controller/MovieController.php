@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
-use App\Entity\User;
-use App\Entity\Vote;
 use App\Form\MovieType;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
