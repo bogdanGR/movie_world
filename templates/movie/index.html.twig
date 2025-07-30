@@ -60,7 +60,7 @@
                                     <div class="col-6">
                                         <p class="align-item-center mb-0">
 
-                                            {% set vote = app.user.getUserVoteByMovieId(movie.id) %}
+                                            {% set vote = app.user ? app.user.getUserVoteByMovieId(movie.id) : null %}
 
                                             {% if app.user and app.user.id != movie.user.id %}
                                                 <a href="#" class="vote-link {{ vote and vote.type == constant('App\\Entity\\Vote::TYPE_LIKE') ? 'text-success fw-bold' : '' }}"data-movie="{{ movie.id }}" data-type="like">
