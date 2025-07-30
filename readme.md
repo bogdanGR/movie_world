@@ -28,7 +28,7 @@ Implemented as a Case study for PHP Software Engineer at Travelstaytion.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/movie-voting-app.git
+git clone git@github.com:bogdanGR/movie_world.git
 cd movie-voting-app
 ```
 ### 2. Install Dependencies and setup env
