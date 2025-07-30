@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
+use App\Entity\User;
 use App\Entity\Vote;
 use App\Form\MovieType;
 use App\Repository\MovieRepository;
@@ -13,18 +14,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Doctrine\ORM\Query\Expr\Join;
 
-
-final class MovieController extends AbstractController
+class MovieController extends AbstractController
 {
     #[Route('/', name: 'movie_index')]
     public function index(Request $request, MovieRepository $movieRepository, PaginatorInterface $paginator): Response
     {
         $sortBy = $request->query->get('sort', 'created_at');
         $sortOrder = $request->query->get('order', 'desc');
+        $userId = $request->query->get('user');
 
-        $queryBuilder = $movieRepository->getSortedQueryBuilder($sortBy, $sortOrder);
+        $queryBuilder = $movieRepository->getSortedQueryBuilder($sortBy, $sortOrder, $userId);
 
         $pagination = $paginator->paginate(
             $queryBuilder,

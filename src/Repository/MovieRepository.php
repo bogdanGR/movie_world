@@ -28,7 +28,7 @@ class MovieRepository extends ServiceEntityRepository
      * @param string $sortOrder
      * @return QueryBuilder
      */
-    public function getSortedQueryBuilder(string $sortBy = 'created_at', string $sortOrder = 'desc'): QueryBuilder
+    public function getSortedQueryBuilder(string $sortBy = 'created_at', string $sortOrder = 'desc', int $userId = null): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('m');
 
@@ -55,6 +55,13 @@ class MovieRepository extends ServiceEntityRepository
             default:
                 $queryBuilder->orderBy('m.created_at', $sortOrder);
                 break;
+        }
+
+        if ($userId) {
+            $queryBuilder
+                ->join('m.user', 'u')
+                ->andWhere('u.id = :userId')
+                ->setParameter('userId', $userId);
         }
 
         return $queryBuilder;

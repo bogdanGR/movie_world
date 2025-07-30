@@ -86,9 +86,13 @@
                                         <p class="text-end">
                                             Posted by
                                             {% if app.user and app.user.id == movie.user.id %}
-                                                You
+                                                <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'user': movie.user.id})) }}">
+                                                    You
+                                                </a>
                                             {% else %}
-                                                {{ movie.user.name }}
+                                                <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all | merge({'user': movie.user.id})) }}">
+                                                    {{ movie.user.name }}
+                                                </a>
                                             {% endif %}
                                         </p>
                                     </div>
