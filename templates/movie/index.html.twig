@@ -44,12 +44,15 @@
                                 </div>
                                 <div class="pb-3 pt-3 text-end">
                                     <a href="{{ path('movie_show', {'id': movie.id}) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                    <a href="{{ path('movie_edit', {'id': movie.id}) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                    <form method="post" action="{{ path('movie_delete', {'id': movie.id}) }}"
-                                          class="d-inline" onsubmit="return confirm('Are you sure?');">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ movie.id) }}">
-                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
-                                    </form>
+
+                                    {% if app.user and app.user.id == movie.user.id %}
+                                        <a href="{{ path('movie_edit', {'id': movie.id}) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                        <form method="post" action="{{ path('movie_delete', {'id': movie.id}) }}"
+                                              class="d-inline" onsubmit="return confirm('Are you sure?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ movie.id) }}">
+                                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    {% endif %}
                                 </div>
                                 <p class="card-text text-muted">{{ movie.description[:250] ~ '...' }}</p>
 
