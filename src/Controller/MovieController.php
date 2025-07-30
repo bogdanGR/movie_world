@@ -32,13 +32,14 @@ class MovieController extends AbstractController
             10
         );
 
-        $totalMovies = $movieRepository->count([]);
+        $totalMovies = $pagination->getTotalItemCount();
 
         return $this->render('movie/index.html.twig', [
             'movies' => $pagination,
             'totalMovies' => $totalMovies,
             'currentSort' => $sortBy,
             'currentOrder' => $sortOrder,
+            'totalShowedCount' => $totalMovies
         ]);
     }
 
