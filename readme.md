@@ -36,6 +36,7 @@ cd movie_world
 ```bash  
 composer install
 cp .env .env.local
+Change the db_user && db_password in .env.local to your credits
 DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=8.0"
 ```
 ### 3. Create the Database & Run Migrations
